@@ -108,10 +108,15 @@ export default class App extends React.Component {
         else {
             return (
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-                    <Map ref='map' center={[0,0]} zoom={3}>
+                    <Map ref='map' center={[0,0]} zoom={3} maxBounds={[[-90, -180],[90, 180]]}>
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                            /*noWrap={true}
+                            bounds={[
+                            [-90, -180],
+                            [90, 180]
+                        ]}*/
                         />
                         <Marker icon={IssPlaceHolder} position={this.state.position}>
                             <Popup>A pretty CSS3 popup.<br/>Easily customizable.</Popup>
