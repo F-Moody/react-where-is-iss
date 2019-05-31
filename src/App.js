@@ -3,6 +3,7 @@ import './App.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet'
 import L from 'leaflet';
 
+//"start": "react-scripts start",
 const axios = require('axios');
 const TLEJS = require('tle.js');
 const tlejs = new TLEJS();
