@@ -38,7 +38,7 @@ export default class App extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevState.loading !== this.state.loading) {
+        if (prevState.loading !== this.state.loading) {
             this.map = this.refs.map.leafletElement
             this._drawLine()
         }
@@ -54,11 +54,9 @@ export default class App extends React.Component {
     }
 
     _getTleData = async () => {
-        const { data } = await axios.get('https://api.wheretheiss.at/v1/satellites/25544/tles?format=text')
+        const {data} = await axios.get('https://api.wheretheiss.at/v1/satellites/25544/tles?format=text')
         const threeOrbitsArr = tlejs.getGroundTrackLatLng(data)
         this.setState({futurePath: threeOrbitsArr[2], currentPath: threeOrbitsArr[1], pastPath: threeOrbitsArr[0]})
-        console.log(threeOrbitsArr)
-
     }
 
     _drawLine = () => {
@@ -67,11 +65,11 @@ export default class App extends React.Component {
         const pointB = new L.LatLng(-2.205208, 50.164638);
         const pointList = [pointA, pointB];*/
 
-        const futurList = [...this.state.futurePath];
+        const futureList = [...this.state.futurePath];
         const currentList = [...this.state.currentPath]
         const pastList = [...this.state.pastPath]
 
-        const futurPolyline = new L.Polyline(futurList, {
+        const futurePolyline = new L.Polyline(futureList, {
             color: 'red',
             weight: 3,
             opacity: 0.5,
@@ -94,29 +92,23 @@ export default class App extends React.Component {
         });
 
         presentPolyline.addTo(this.map)
-        futurPolyline.addTo(this.map)
+        futurePolyline.addTo(this.map)
         pastPolyline.addTo(this.map);
     }
 
 
     render() {
-        if(this.state.loading) {
+        if (this.state.loading) {
             return (
                 <div id="loadingBar"></div>
             )
-        }
-        else {
+        } else {
             return (
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-                    <Map ref='map' center={[0,0]} zoom={3} maxBounds={[[-90, -180],[90, 180]]}>
+                    <Map ref='map' center={[0, 0]} zoom={3} maxBounds={[[-90, -180], [90, 180]]}>
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                            /*noWrap={true}
-                            bounds={[
-                            [-90, -180],
-                            [90, 180]
-                        ]}*/
                         />
                         <Marker icon={IssPlaceHolder} position={this.state.position}>
                             <Popup>A pretty CSS3 popup.<br/>Easily customizable.</Popup>
