@@ -46,10 +46,17 @@ export default class App extends React.Component {
     }
 
     _updateIssPosition = async () => {
+        let firstLoad = true
         setInterval(async () => {
             const response = await axios.get('https://api.wheretheiss.at/v1/satellites/25544')
             const {name, latitude, longitude} = response.data
             this.setState({position: [latitude, longitude], loading: false})
+            //center the map on ISS position only the first time
+            if(firstLoad) {
+                this.setState({initialPosition: [latitude, longitude]})
+                firstLoad = false
+            }
+
         }, 1000)
 
     }
@@ -97,12 +104,11 @@ export default class App extends React.Component {
         pastPolyline.addTo(this.map);
     }
 
-    /*<div id="loadingBar"></div>*/
     render() {
         return (
             <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                 <LoadingScreen loading={this.state.loading}/>
-                <Map ref='map' center={[0, 0]} zoom={3} maxBounds={[[-90, -180], [90, 180]]}>
+                <Map ref='map' center={this.state.initialPosition || [0, 0]} zoom={3} maxBounds={[[-90, -180], [90, 180]]}>
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
