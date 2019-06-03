@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet'
 import L from 'leaflet';
+import LoadingScreen from './Components/LoadingScreen/LoadingScreen'
 
 //"start": "react-scripts start",
 const axios = require('axios');
@@ -96,28 +97,22 @@ export default class App extends React.Component {
         pastPolyline.addTo(this.map);
     }
 
-
+    /*<div id="loadingBar"></div>*/
     render() {
-        if (this.state.loading) {
-            return (
-                <div id="loadingBar"></div>
-            )
-        } else {
-            return (
-                <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-                    <Map ref='map' center={[0, 0]} zoom={3} maxBounds={[[-90, -180], [90, 180]]}>
-                        <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                        />
-                        <Marker icon={IssPlaceHolder} position={this.state.position}>
-                            <Popup>A pretty CSS3 popup.<br/>Easily customizable.</Popup>
-                        </Marker>
-                    </Map>
-                </div>
-            );
-
-        }
+        return (
+            <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                <LoadingScreen loading={this.state.loading}/>
+                <Map ref='map' center={[0, 0]} zoom={3} maxBounds={[[-90, -180], [90, 180]]}>
+                    <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                    />
+                    { !this.state.loading && <Marker icon={IssPlaceHolder} position={this.state.position}>
+                        <Popup>A pretty CSS3 popup.<br/>Easily customizable.</Popup>
+                    </Marker>}
+                </Map>
+            </div>
+        );
 
     }
 }
